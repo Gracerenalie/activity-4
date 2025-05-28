@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Edit Student</title>
+    <!-- Bootstrap 5 CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+    body, html {
+        height: 100%;
+        background-color: #f8f9fa;
+        margin: 0;
+    }
+    .center-container {
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 1rem;
+    }
+    .card {
+        width: 100%;
+        max-width: 480px;
+        box-shadow: 0 0.125rem 0.25rem rgb(0 0 0 / 0.075);
+        border-radius: 0.5rem;
+    }
+    /* Blue theme */
+    .card-header {
+        background-color: #0d6efd; /* Bootstrap primary blue */
+        color: white;
+    }
+    .btn-primary {
+        background-color: #0d6efd;
+        border-color: #0d6efd;
+    }
+    .btn-primary:hover {
+        background-color: #0b5ed7;
+        border-color: #0a58ca;
+    }
+    .btn-secondary {
+        background-color: #6c757d;
+        border-color: #6c757d;
+    }
+</style>
+
+</head>
+<body>
+
+{% include 'structure/header.html' %}
+
+<div class="center-container">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+        <h4 class="mb-0">Edit Student</h4>
+    </div>
+
+        <div class="card-body">
+
+            {% if error_message %}
+                <div class="alert alert-danger" role="alert">
+                    {{ error_message }}
+                </div>
+            {% endif %}
+
+            <form method="post" class="needs-validation" novalidate>
+                {% csrf_token %}
+
+                <div class="row mb-3">
+
+                    <div class="row mb-3">
+                        <div class="mb-3">
+                        <label for="first_name" class="form-label">First Name</label>
+                        <input type="text" name="first_name" id="first_name" class="form-control" value="{{ first_name|default:student.first_name }}" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="middle_name" class="form-label">Middle Name (optional)</label>
+                        <input type="text" name="middle_name" id="middle_name" class="form-control" value="{{ middle_name|default:student.middle_name }}">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="last_name" class="form-label">Last Name</label>
+                        <input type="text" name="last_name" id="last_name" class="form-control" value="{{ last_name|default:student.last_name }}" required>
+                    </div>
+
+
+                <div class="mb-3">
+                    <label for="gender" class="form-label">Gender</label>
+                    <select class="form-select" id="gender" name="gender" required>
+                        <option value="" disabled {% if not gender and not student.gender %}selected{% endif %}>-- Select --</option>
+                        <option value="Female" {% if gender == "Female" or student.gender == "Female" %}selected{% endif %}>Female</option>
+                        <option value="Male" {% if gender == "Male" or student.gender == "Male" %}selected{% endif %}>Male</option>
+                        <option value="Others" {% if gender == "Others" or student.gender == "Others" %}selected{% endif %}>Others</option>
+                    </select>
+                    <div class="invalid-feedback">Please select a gender.</div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="date_of_birth" class="form-label">Date of Birth</label>
+                    <input
+                        type="date"
+                        class="form-control"
+                        id="date_of_birth"
+                        name="date_of_birth"
+                        value="{{ date_of_birth|default:student.date_of_birth|date:'Y-m-d' }}"
+ }}"
+                        required>
+                    <div class="invalid-feedback">Please enter a valid date of birth.</div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="year_level" class="form-label">Year Level</label>
+                    <select class="form-select" id="year_level" name="year_level" required>
+                        <option value="" disabled {% if not year_level and not student.year_level %}selected{% endif %}>-- Select --</option>
+                        <option value="1st" {% if year_level == "1st" or student.year_level == "1st" %}selected{% endif %}>1st Year</option>
+                        <option value="2nd" {% if year_level == "2nd" or student.year_level == "2nd" %}selected{% endif %}>2nd Year</option>
+                        <option value="3rd" {% if year_level == "3rd" or student.year_level == "3rd" %}selected{% endif %}>3rd Year</option>
+                        <option value="4th" {% if year_level == "4th" or student.year_level == "4th" %}selected{% endif %}>4th Year</option>
+                    </select>
+                    <div class="invalid-feedback">Please select a year level.</div>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                    <a href="{% url 'list_students' %}" class="btn btn-secondary">Cancel</a>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap 5 JS Bundle -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Bootstrap Form Validation -->
+<script>
+(() => {
+    'use strict'
+    const forms = document.querySelectorAll('.needs-validation')
+    Array.from(forms).forEach(form => {
+        form.addEventListener('submit', event => {
+            if (!form.checkValidity()) {
+                event.preventDefault()
+                event.stopPropagation()
+            }
+            form.classList.add('was-validated')
+        }, false)
+    })
+})()
+</script>
+
+</body>
+</html>
